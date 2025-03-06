@@ -173,54 +173,48 @@
 			
 			// Submit Suggestion
 			public function submit_suggestion() {
-				$username = $this->input->post('anonymous') ? NULL : $this->input->post('username');
-		
-				// Validate Input
-				$this->form_validation->set_rules('application', 'Application', 'required');
-				$this->form_validation->set_rules('suggestion_type', 'Suggestion Type', 'required');
-				$this->form_validation->set_rules('message', 'Message', 'required');
-		
+				$this->load->library('form_validation');
+			
+				// Validate fields
+				if (empty($this->input->post('application'))) {
+					$this->form_validation->set_rules('application', 'Application', 'callback_field_required');
+				}
+				if (empty($this->input->post('suggestion_type'))) {
+					$this->form_validation->set_rules('suggestion_type', 'Suggestion Type', 'callback_field_required');
+				}
+				if (empty($this->input->post('message'))) {
+					$this->form_validation->set_rules('message', 'Message', 'callback_field_required');
+				}
+			
 				if ($this->form_validation->run() == FALSE) {
-					$this->session->set_flashdata('error', validation_errors());
-					redirect(base_url('user/suggestion_form'));
-					return;
-				}
-		
-				// Prepare Data
-				$data = [
-					'username' => $username,
-					'application' => $this->input->post('application'),
-					'suggestion_type' => $this->input->post('suggestion_type'),
-					'message' => $this->input->post('message'),
-					'voice_message_path' => $this->_upload_voice_message()
-				];
-		
-				// Save Suggestion
-				if ($this->user_model->save_suggestion($data)) {
-					$this->session->set_flashdata('success', 'Suggestion submitted successfully!');
+					$this->load->view('suggestion_form');
 				} else {
-					$this->session->set_flashdata('error', 'Failed to submit suggestion.');
-				}
-		
-				redirect(base_url('user/suggestion_form'));
-			}
-		
-			// Upload voice message if exists
-			private function _upload_voice_message() {
-				if (!empty($_FILES['voice_message']['name'])) {
-					$config['upload_path'] = './uploads/';
-					$config['allowed_types'] = 'mp3|wav';
-					$config['max_size'] = 5000;
-					$config['file_name'] = time() . '_' . $_FILES['voice_message']['name'];
-		
-					$this->upload->initialize($config);
-		
-					if ($this->upload->do_upload('voice_message')) {
-						return 'uploads/' . $this->upload->data('file_name');
+					$data = [
+						'username' => $this->input->post('anonymous') ? NULL : $this->input->post('username'),
+						'application' => $this->input->post('application'),
+						'suggestion_type' => $this->input->post('suggestion_type'),
+						'message' => $this->input->post('message'),
+						'voice_message_path' => $this->_upload_voice_message()
+					];
+			
+					if ($this->user_model->save_suggestion($data)) {
+						$this->session->set_flashdata('success', 'Suggestion submitted successfully!');
+					} else {
+						$this->session->set_flashdata('error', 'Failed to submit suggestion.');
 					}
+					redirect(base_url('user/suggestion_form'));
 				}
-				return NULL;
 			}
+			
+			// Custom validation callback function
+			public function field_required($str) {
+				if (trim($str) == '') {
+					$this->form_validation->set_message('field_required', 'This field is required.');
+					return FALSE;
+				}
+				return TRUE;
+			}
+			
 	}
 
 

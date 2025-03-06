@@ -217,36 +217,63 @@
         <p class="error"><?php echo $this->session->flashdata('error'); ?></p>
     <?php endif; ?>
 
-    <form action="<?= base_url('user/submit_suggestion') ?>" method="post" enctype="multipart/form-data">
-        
-        <select name="application">
-            <option value="" disabled selected>Select Application</option>
-            <option value="SDMS">SDMS</option>
-            <option value="BI Report">BI Report</option>
-            <option value="Generic">Generic</option>
-            <option value="Others">Others</option>
-        </select>
-
-        <select name="suggestion_type">
-            <option value="" disabled selected>Select Suggestion Type</option>
-            <option value="Change">Change</option>
-            <option value="Suggestion">Suggestion</option>
-        </select>
-
-        <textarea name="message" placeholder="Enter your message here..." required></textarea>
-
-        <div class="buttons">
-            <button type="button" class="recording-btn" onclick="startRecording()">Start Recording</button>
-            <button type="button" class="recording-btn" onclick="stopRecording()">Stop Recording</button>
+    <form method="post" action="<?= base_url('user/submit_suggestion'); ?>" enctype="multipart/form-data">
+    
+        <div>
+            <select name="application">
+                <option value="">Select Application</option>
+                <option value="SDMS">SDMS</option>
+                <option value="BI Report">BI Report</option>
+                <option value="BI Report">Other</option>
+            </select>
+            <span class="error"><?= form_error('application'); ?></span>
         </div>
-        
-        <audio id="audioPlayer" controls></audio>
-        <input type="file" name="voice_message" id="voiceMessageInput" accept="audio/*" style="display: none;">
+
+        <div>
+            <select name="suggestion_type">
+                <option value="">Select Suggestion Type</option>
+                <option value="Change">Change</option>
+                <option value="Suggestion">Suggestion</option>
+            </select>
+            <span class="error"><?= form_error('suggestion_type'); ?></span>
+        </div>
+
+        <div>
+            <textarea name="message" placeholder="Enter your message"></textarea>
+            <span class="error"><?= form_error('message'); ?></span>
+        </div>
+
+        <div>
+            <input type="file" name="voice_message">
+        </div>
 
         <button type="submit" class="submit-btn">Save</button>
     </form>
+
+<style>
+    .error {
+        color: red;
+        font-size: 14px;
+        display: block;
+        margin-top: 5px;
+    }
+</style>
+
     </div>
 </div>
 
 </body>
+<!-- jQuery Library (Place before closing </body> tag) -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<script>
+    $(document).ready(function () {
+        $(".input-field").on("input change", function () {
+            $(this).next(".error").text(""); // Remove error message when user types/selects
+        });
+    });
+</script>
+</body>
+</html>
+
 </html>
