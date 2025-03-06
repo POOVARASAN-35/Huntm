@@ -27,9 +27,9 @@
 		}
 
 		//Suggestion Data
-	public function save_suggestion($data) {
-        return $this->db->insert('suggestions', $data);
-    }
+		public function insert_suggestion($data) {
+			return $this->db->insert('suggestions', $data);
+		}
 	}
 
 	

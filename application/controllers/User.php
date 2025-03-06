@@ -1,221 +1,218 @@
 <?php 
-	class User extends CI_Controller{
+class User extends CI_Controller {
+    public function __construct() {
+        parent::__construct();
+        $this->load->helper('url');
+        $this->load->library(['form_validation', 'session']);
+        $this->load->model('User_model');
+        $this->load->database();
+    }
+    
+    public function signup() {
+        $this->load->view('signup_form');
+    }
 
-			public function __construct(){
-				parent::__construct();
-				$this->load->helper('url');
-				$this->load->library('form_validation');
-				$this->load->model('user_model');
-				$this->load->database();
-				$this->load->library('session');
+    public function submit() {
+		$email = $this->input->post('email');
+		$firstname = $this->input->post('firstname');
+		$lastname = $this->input->post('lastname');
+		$phone = $this->input->post('phone');
+		$username = $this->input->post('username');
+		$password = $this->input->post('password');
+		$role = $this->input->post('role');
+		$address = $this->input->post('address');
+		$pincode = $this->input->post('pincode');
+		$city = $this->input->post('city');
+		$officemaplink = $this->input->post('officemaplink');
+		$officenumber = $this->input->post('officenumber');
+	
+		$errors = [];
+	
+		if (empty($email)) {
+			$errors[] = 'Email field is required.';
+		}
+		if (empty($firstname)) {
+			$errors[] = 'First Name field is required.';
+		}
+		if (empty($lastname)) {
+			$errors[] = 'Last Name field is required.';
+		}
+		if (empty($phone)) {
+			$errors[] = 'Mobile Number field is required.';
+		}
+		if (empty($username)) {
+			$errors[] = 'User Name field is required.';
+		}
+		if (empty($password)) {
+			$errors[] = 'Password field is required.';
+		}
+		if (empty($role)) {
+			$errors[] = 'Role field is required.';
+		}
+		if (empty($address)) {
+			$errors[] = 'Address field is required.';
+		}
+		if (empty($pincode)) {
+			$errors[] = 'Pin Code field is required.';
+		}
+		if (empty($city)) {
+			$errors[] = 'City field is required.';
+		}
+		if (empty($officemaplink)) {
+			$errors[] = 'Office Map Link field is required.';
+		}
+		if (empty($officenumber)) {
+			$errors[] = 'Office Mobile Number field is required.';
+		}
+	
+		if (!empty($errors)) {
+			foreach ($errors as $error) {
+				echo "<script>alert('$error');</script>";
 			}
-			
-			public function signup(){
-				$this->load->view('signup_form');
-			}
-
-			public function submit(){
-                $this->form_validation->set_rules('email', 'Email', 'required|valid_email');
-                $this->form_validation->set_rules('firstname', 'First Name', 'required');
-                $this->form_validation->set_rules('lastname', 'Last Name', 'required');
-                $this->form_validation->set_rules('phone', 'Mobile Number', 'required|numeric');
-                $this->form_validation->set_rules('username', 'User Name', 'required');
-                $this->form_validation->set_rules('role', 'Role', 'required');
-                $this->form_validation->set_rules('address', 'Address', 'required');
-                $this->form_validation->set_rules('pincode', 'Pin Code', 'required|numeric');
-                $this->form_validation->set_rules('city', 'City', 'required');
-                $this->form_validation->set_rules('officemaplink', 'Office Map Link', 'valid_url');
-                $this->form_validation->set_rules('officenumber', 'Office Mobile Number', 'required|numeric');
-
-				if($this->form_validation->run()==FALSE){
-					$this->load->view('signup_form');
-				}else{
-					$data = array(
-                        'Email'         => $this->input->post('email'),
-                        'Firstname'     => $this->input->post('firstname'),
-                        'Lastname'      => $this->input->post('lastname'),
-                        'Phone'         => $this->input->post('phone'),
-                        'Username'      => $this->input->post('username'),
-                        'Password'    => $this->input->post('password'),
-                        'Role'        => $this->input->post('role'),
-                        'Address'       => $this->input->post('address'),
-                        'Pincode'       => $this->input->post('pincode'),
-                        'City'          => $this->input->post('city'),
-                        'officemaplink' => $this->input->post('officemaplink'),
-                        'Officenumber'  => $this->input->post('officenumber')
-                    );
-				
-				
-					$response = $this->user_model->store($data);
-					if($response==true){
-						echo "<script>
-                        alert('✅Registration successful!');
-                        window.location.href = '" . base_url('Regisationform') . "';
-                      </script>";
-					}else{
-                        echo "<script>alert('❌Error in registration. Please try again.');</script>";
-					}
-				}
-			}
-
-			//Load login form here
-			public function login(){			
-				if($this->session->has_userdata('id')){
-					redirect('user/home');
-				}
-				$this->load->view('login_form');
-			}
-
-			public function login_user(){
-				$this->form_validation->set_rules('email','Email','required');
-				$this->form_validation->set_rules('Password','Password','required');
-
-				if($this->form_validation->run()==FALSE){
-					$this->load->view('login_form');
-				}else{
-					$email = $this->input->post('email');
-					$password = $this->input->post('Password');
-					$this->load->database();
-					$this->load->model('user_model');
-					if($user = $this->user_model->getUser($email)){
-						if($user->password==$password){
-							
-							$this->load->library('session');
-							$this->session->set_userdata('id',$user->id);
-							redirect('user/submit_suggestion');
-                            echo "<script>alert('✅Login successful!');</script>";
-							
-						}else{
-							echo "<script>alert('❌Login Error!');</script>";
-						}
-					}else{
-						echo "<script>alert('❌No account exists with this email!');</script>";
-					}
-				}			
-			}
-
-			public function home(){
-				$this->load->view('home');
-			}
-
-			public function logout(){
-				$this->session->unset_userdata('id');
-				redirect('user/login');
-			}
-
-			// public function change_password(){
-			// 	if($this->session->has_userdata('id')){
-			// 		$this->load->view('change_password_form');
-			// 	}else{
-			// 		redirect('user/login');
-			// 	}
-			// }
-
-			// public function update_password(){
-			// 	$this->form_validation->set_rules('old_password','Old Password','required');
-			// 	$this->form_validation->set_rules('new_password','New Password','required');
-			// 	$this->form_validation->set_rules('confirm_password','Confirm Password','required|matches[new_password]');
-
-			// 	if($this->form_validation->run()==FALSE){
-			// 		$this->load->view('change_password_form');
-			// 	}else{
-			// 		$old_password = $this->input->post('old_password');
-			// 		$new_password = $this->input->post('new_password');
-				
-
-			// 		if(strcmp($old_password,$new_password)==0){
-			// 			$message = "New password should be a different password";
-			// 		}else{
-
-			// 			$id = $this->session->userdata('id');
-			// 			if($this->user_model->oldPasswordMatches($id,$old_password)){
-			// 				$this->user_model->changeUserPassword($id,$new_password);
-			// 				$message = "Password changed successfully";
-			// 			}else{
-			// 				$message = "Your old Password is wrong!";
-			// 			}
-						
-			// 		}
-			// 	}
-			// }
-
-			// public function forgot_password(){
-			// 	$this->load->view('forgot_password');
-            // }
-			// public function send_password(){
-			// 	$this->form_validation->set_rules('email','Email','required');
-
-			// 	if($this->form_validation->run()==FALSE){
-			// 		$this->load->view('forgot_password');
-			// 	}else{
-			// 		$email  = $this->input->post('email');
-			// 		if($user = $this->user_model->getUserByEmail($email)){
-			// 			$to = $email;
-			// 			$subject = "Password";
-			// 			$message = "Your password is ".$user->password;
-			// 			$headers = "From:contact@jvlcode.com\r\n";
-
-			// 			mail($to,$subject,$message,$headers);
-
-			// 			echo "Email has been sent!. Please check your inbox";
-			// 		}else{
-			// 			echo "No user with this email exist!";
-			// 		}
-			// 	}
-
-			// }
-
-
-			//Load suggestion form here
-			public function suggestion_form() {
-				$this->load->view('suggestion_form');
-			}
-			
-			// Submit Suggestion
-			public function submit_suggestion() {
-				$this->load->library('form_validation');
-			
-				// Validate fields
-				if (empty($this->input->post('application'))) {
-					$this->form_validation->set_rules('application', 'Application', 'callback_field_required');
-				}
-				if (empty($this->input->post('suggestion_type'))) {
-					$this->form_validation->set_rules('suggestion_type', 'Suggestion Type', 'callback_field_required');
-				}
-				if (empty($this->input->post('message'))) {
-					$this->form_validation->set_rules('message', 'Message', 'callback_field_required');
-				}
-			
-				if ($this->form_validation->run() == FALSE) {
-					$this->load->view('suggestion_form');
-				} else {
-					$data = [
-						'username' => $this->input->post('anonymous') ? NULL : $this->input->post('username'),
-						'application' => $this->input->post('application'),
-						'suggestion_type' => $this->input->post('suggestion_type'),
-						'message' => $this->input->post('message'),
-						'voice_message_path' => $this->_upload_voice_message()
-					];
-			
-					if ($this->user_model->save_suggestion($data)) {
-						$this->session->set_flashdata('success', 'Suggestion submitted successfully!');
-					} else {
-						$this->session->set_flashdata('error', 'Failed to submit suggestion.');
-					}
-					redirect(base_url('user/suggestion_form'));
-				}
-			}
-			
-			// Custom validation callback function
-			public function field_required($str) {
-				if (trim($str) == '') {
-					$this->form_validation->set_message('field_required', 'This field is required.');
-					return FALSE;
-				}
-				return TRUE;
-			}
-			
+			redirect('user/signup');
+		}
+	
+		$data = [
+			'Email' => $email,
+			'Firstname' => $firstname,
+			'Lastname' => $lastname,
+			'Phone' => $phone,
+			'Username' => $username,
+			'Password' => password_hash($password, PASSWORD_DEFAULT),
+			'Role' => $role,
+			'Address' => $address,
+			'Pincode' => $pincode,
+			'City' => $city,
+			'officemaplink' => $officemaplink,
+			'Officenumber' => $officenumber
+		];
+	
+		$response = $this->User_model->store($data);
+		if ($response) {
+			echo "<script>alert('Registration successful!');</script>";
+			redirect('user/signup');
+		} else {
+			echo "<script>alert('Error in registration. Please try again.');</script>";
+			redirect('user/signup');
+		}
 	}
 
+    public function login() {
+        if ($this->session->has_userdata('id')) redirect('user/suggestion_form');
+        $this->load->view('login_form');
+    }
 
+    public function login_user() {
+		$email = $this->input->post('email', true);
+		$password = $this->input->post('password', true);
+	
+		$errors = [];
+	
+		if (empty($email)) {
+			$errors['email'] = 'Email field is required.';
+		}
+		if (empty($password)) {
+			$errors['password'] = 'Password field is required.';
+		}
+	
+		if (!empty($errors)) {
+			$this->session->set_flashdata('errors', $errors);
+			redirect('user/login');
+		}
+	
+		if ($user = $this->User_model->getUser($email)) {
+			if (password_verify($password, $user->password)) {
+				$this->session->set_userdata('id', $user->id);
+				redirect('user/suggestion_form');
+			} else {
+				$this->session->set_flashdata('errors', ['password' => 'Incorrect password.']);
+				redirect('user/login');
+			}
+		} else {
+			$this->session->set_flashdata('errors', ['email' => 'No account exists with this email.']);
+			redirect('user/login');
+		}
+	}
+	
+
+    // public function home() {
+    //     $this->load->view('home');
+    // }
+
+    // public function logout() {
+    //     $this->session->unset_userdata('id');
+    //     redirect('user/login');
+    // }
+
+    public function suggestion_form() {
+        $this->load->view('suggestion_form');
+    }
+
+    public function submit_suggestion() {
+		$application = $this->input->post('application', true);
+		$suggestion_type = $this->input->post('suggestion_type', true);
+		$message = $this->input->post('message', true);
+		$voice_message = $this->input->post('voice_message', true);
+	
+		$errors = [];
+	
+		if (empty($application)) {
+			$errors[] = 'Application field is required.';
+		}
+		if (empty($suggestion_type)) {
+			$errors[] = 'Suggestion type field is required.';
+		}
+		if (empty($message)) {
+			$errors[] = 'Message field is required.';
+		}
+	
+		if (!empty($errors)) {
+			$this->session->set_flashdata('errors', $errors);
+			redirect('user/suggestion_form');
+		}
+	
+		$audio_filename = null;
+		$audio_folder = FCPATH . 'application/audio/';
+	
+		if (!is_dir($audio_folder)) {
+			if (!mkdir($audio_folder, 0777, true)) {
+				$this->session->set_flashdata('errors', ['Failed to create audio folder.']);
+				redirect('user/suggestion_form');
+			}
+		}
+	
+		if (!empty($voice_message)) {
+			$audio_filename = 'audio_' . time() . '.wav';
+			$audio_path = $audio_folder . $audio_filename;
+	
+			$decoded_audio = base64_decode($voice_message, true);
+			if ($decoded_audio === false) {
+				$this->session->set_flashdata('errors', ['Base64 decoding failed. Please check the provided audio data.']);
+				redirect('user/suggestion_form');
+			}
+	
+			if (file_put_contents($audio_path, $decoded_audio) === false) {
+				$this->session->set_flashdata('errors', ['Failed to save the audio file. Please check file permissions.']);
+				redirect('user/suggestion_form');
+			}
+		}
+	
+		$data = [
+			'application' => $application,
+			'suggestion_type' => $suggestion_type,
+			'message' => $message,
+			'voice_message' => $audio_filename
+		];
+	
+		$inserted = $this->User_model->insert_suggestion($data);
+	
+		if ($inserted) {
+			$this->session->set_flashdata('success', 'Suggestion submitted successfully.');
+			redirect('user/suggestion_form');
+		} else {
+			$this->session->set_flashdata('errors', ['Failed to submit suggestion.']);
+			redirect('user/suggestion_form');
+		}
+	}
+}
 ?>
