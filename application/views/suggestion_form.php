@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <style>
-       body { 
+        body { 
             font-family: 'Poppins', sans-serif; 
             font-size: 16px; 
             font-weight: 400; 
@@ -15,6 +15,7 @@
             line-height: 1.6; 
             background-color: #2C3E50; 
         } 
+
         header { 
             position: fixed; 
             top: 0; left: 0; 
@@ -23,13 +24,16 @@
             padding: 10px 20px; 
             z-index: 1000; 
         } 
+
         .huntmlogo{ 
             width:50px; 
             height:50px; 
         } 
+
         a{ 
             text-decoration: none; 
         } 
+
         .container{ 
             display: grid; 
             grid-template-columns: repeat(2, 1fr); 
@@ -37,6 +41,7 @@
             margin-top:10%; 
             padding: 20px; 
         } 
+
         .suggest-form { 
             background: white; 
             padding: 20px; 
@@ -47,15 +52,18 @@
             position: relative;
             right: -18%; 
         } 
+
         .suggest-content{ 
             position: relative;
             left: -18%; 
         } 
+
         .suggest-content h1{ 
             font-size: 50px; 
             font-weight: bold; 
             color: white; 
         } 
+
         .suggest-content p{ 
             text-align: left; 
             display: flex; 
@@ -64,23 +72,27 @@
             color: white; 
             padding:5px 0; 
         } 
+
         .suggest-content i{ 
             font-size: 20px; 
             padding-right: 10px; 
             color:#0000FF; 
         } 
+
         .image-section { 
             position: relative; 
             width: 100%; 
             height: 170px; 
             margin-bottom: 15px; 
         } 
+
         .image-section img { 
             width: 100%; 
             height: 100%; 
             border-radius: 8px; 
             object-fit: cover; 
         } 
+
         .image-text { 
             position: absolute; 
             top: 50%; 
@@ -91,6 +103,7 @@
             font-weight: bold; 
             text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.7); 
         } 
+
         input, select, textarea { 
             width: 100%; 
             padding: 10px; 
@@ -99,15 +112,18 @@
             border-radius: 4px; 
             font-size: 14px; 
         } 
+
         textarea { 
             height: 80px; 
             resize: none; 
         } 
+
         .buttons { 
             display: flex; 
             justify-content: space-between; 
             margin-top: 10px; 
         } 
+
         .recording-btn { 
             background: #007bff; 
             color: white; 
@@ -118,9 +134,11 @@
             transition: 0.3s; 
             margin-top: 10px;
         } 
+
         .recording-btn:hover { 
             background: #0056b3; 
         } 
+
         .submit-btn { 
             width: 100%; 
             background: #28a745; 
@@ -133,9 +151,11 @@
             margin-top: 15px; 
             transition: 0.3s; 
         } 
+
         .submit-btn:hover { 
             background: #218838; 
         } 
+
         audio { 
             display: block; 
             margin-top: 10px; 
@@ -152,19 +172,29 @@
             color: red;
             font-size: 14px;
         }
+
     </style>
 </head>
 <body>
 <?php if ($this->session->flashdata('success')): ?>
-    <div class="alert alert-success" role="alert">
-        <?php echo $this->session->flashdata('success'); ?>
+    <script>
+        window.onload = function() {
+            alert("<?php echo $this->session->flashdata('success'); ?>");
+        };
+    </script>
+<?php endif; ?>
+<?php if ($this->session->flashdata('errors')): ?>
+    <div class="alert alert-danger" role="alert">
+        <?php foreach ($this->session->flashdata('errors') as $error): ?>
+            <p><?php echo $error; ?></p>
+        <?php endforeach; ?>
     </div>
 <?php endif; ?>
 <header>
     <a href="#"><h1 style="font-size:25px; color:white;"><img src="/Huntm/Image/Huntm-logo.svg" alt="Huntm Logo" class="huntmlogo">Huntm</h1></a>
 </header>
 <div class="container">
-<div class="suggest-content"> 
+    <div class="suggest-content"> 
         <h1>Keep your customers engaged with your business</h1> 
         <p><i class="fas fa-chevron-right"></i> Send campaigns to your customers</p> 
         <p><i class="fas fa-chevron-right"></i> Track the results</p> 
@@ -172,12 +202,21 @@
         <p><i class="fas fa-chevron-right"></i> Get insights</p> 
     </div>
     <div class="suggest-form">
-    <div class="image-section"> 
+        <div class="image-section"> 
             <img src="/Huntm/Image/Suggestion-image.jpg" alt="Suggestion"> 
         </div>
         <form id="suggestionForm" method="post" action="<?= base_url('user/submit_suggestion'); ?>">
+        <div class="form-group">
+            <!-- <label>
+                <input type="checkbox" id="anonymous" name="anonymous"> Submit Anonymously
+            </label> -->
+        </div>
             <div class="form-group">
+                <input type="text" name="name" placeholder="Enter your name" id="name" class="form-control validate">
+                <span class="error"><?php echo form_error("name"); ?></span>
+            </div>
 
+            <div class="form-group">
                 <select name="application" class="form-control validate" id="application">
                     <option value="">Application</option>
                     <option value="SDMS">SDMS</option>
@@ -248,7 +287,7 @@
 
                 reader.readAsDataURL(audioBlob);
                 reader.onloadend = () => {
-                    audioBase64 = reader.result.split(",")[1]; // Get base64 string
+                    audioBase64 = reader.result.split(",")[1]; 
                     document.getElementById('status').innerText = "Recording Stopped.";
                 };
             };
@@ -299,13 +338,22 @@
             return isValid;
         }
 
-        // Clear error messages when the user starts typing
         document.querySelectorAll(".validate").forEach(input => {
             input.addEventListener("input", () => {
                 const error = input.nextElementSibling;
                 error.textContent = "";
             });
         });
+    });
+
+    document.getElementById("anonymous").addEventListener("change", function() {
+        let nameField = document.getElementById("name");
+        if (this.checked) {
+            nameField.value = "";
+            nameField.disabled = true;
+        } else {
+            nameField.disabled = false;
+        }
     });
 </script>
 </body>

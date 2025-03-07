@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link rel="stylesheet" href="<?= base_url('/Huntm/assets/css/registrationform.css'); ?>">
     <style>
-        body {
+         body {
             font-family: 'Poppins', sans-serif; 
             font-size: 16px; 
             font-weight: 400; 
@@ -151,11 +151,14 @@
             color: red;
             font-size: 14px;
         }
+
     </style>
 </head>
 <body>
     <header>
-        <a href="#"><h1 style="font-size:25px; color:white;"><img src="/Huntm/Image/Huntm-logo.svg" alt="Huntm Logo" class="huntmlogo">Huntm</h1></a>
+        <a href="#"><h1 style="font-size:25px; color:white;">
+            <img src="/Huntm/Image/Huntm-logo.svg" alt="Huntm Logo" class="huntmlogo">Huntm
+        </h1></a>
     </header>
 
     <div class="login-page">
@@ -166,30 +169,29 @@
             <p><i class="fas fa-chevron-right"></i>Manage your customers</p>
             <p><i class="fas fa-chevron-right"></i>Get insights</p>
         </div>
+
         <div class="reg_container">
             <h2>LOG IN</h2>
-            <form method="post" action="<?=base_url('user/login_user')?>">
-                <input type="text" name="email" placeholder="Mobile Number or Email Id" value="<?php echo set_value('email'); ?>">
-                <?php if (isset($errors['email'])): ?>
-                    <div class="error"><?= $errors['email'] ?></div>
-                <?php endif; ?>
-                <input type="password" name="password" placeholder="Password" value="<?php echo set_value('password'); ?>">
-                <?php if (isset($errors['password'])): ?>
-                    <div class="error"><?= $errors['password'] ?></div>
-                <?php endif; ?>
-                <button type="submit">Login</button>
-                <a href="<?=base_url('user/send_password')?>">Forgot Password?</a>
-                <p class="register-link">New to Huntm.in? <a href="<?=base_url('user/signup')?>">Register</a></p>
+            <form method="post" action="<?= base_url('user/login_user') ?>">
+                <?php $errors = $this->session->flashdata('errors') ?? []; ?>
+
+                <div class="mb-3">
+                    <input type="text" name="email" class="form-control <?= isset($errors['email']) ? 'is-invalid' : '' ?>" 
+                           placeholder="Mobile Number or Email Id" value="<?= $this->session->flashdata('email') ?? '' ?>">
+                    <div class="error"><?= $errors['email'] ?? ''; ?></div>
+                </div>
+
+                <div class="mb-3">
+                    <input type="password" name="password" class="form-control <?= isset($errors['password']) ? 'is-invalid' : '' ?>" 
+                           placeholder="Password">
+                    <div class="error"><?= $errors['password'] ?? ''; ?></div>
+                </div>
+
+                <button type="submit" class="btn btn-primary w-100">Login</button>
+
+                <a href="<?= base_url('user/send_password') ?>" class="d-block text-center mt-2">Forgot Password?</a>
+                <p class="text-center mt-2">New to Huntm.in? <a href="<?= base_url('user/signup') ?>">Register</a></p>
             </form>
-            <div class="icon-box">
-                <a href="#"><i class="fab fa-facebook-f"></i></a>
-            </div>
-            <div class="icon-box">
-                <a href="#"><i class="fab fa-twitter"></i></a>
-            </div>
-            <div class="icon-box">
-                <a href="#"><i class="fab fa-github"></i></a>
-            </div>
         </div>
     </div>
 </body>

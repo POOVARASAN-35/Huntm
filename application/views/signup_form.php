@@ -1,12 +1,13 @@
-see this image how the error message is displaying like that to write the code <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Registration Form</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css ">
-    <link rel="stylesheet" href="<?php echo base_url(); ?>application/views/register.css" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css ">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="<?= base_url('/Huntm/assets/css/registrationform.css'); ?>">
+
+    <title>Create Account</title>
     <style>
         body {
             font-family: 'Poppins', sans-serif; 
@@ -15,6 +16,7 @@ see this image how the error message is displaying like that to write the code <
             color: #333; 
             line-height: 1.6;
             background-color: #2C3E50;
+
         }
 
         header {
@@ -27,35 +29,31 @@ see this image how the error message is displaying like that to write the code <
             z-index: 1000;
         }
 
-        .reg_container {
-            max-width: 450px;
-            margin-top: 40px;
-            background: rgba(255, 255, 255, 0.9);
-            padding: 20px 10px;
-            border-radius: 10px;  
-            position: relative;
-            right: -20%;
-            top: 5%;
-        }
-
         a {
             text-decoration: none;
         }
 
-        .form-control {
-            margin-bottom: 10px;
-        }
-
-        .reg_form {
+        .container {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
             gap:20px;
             margin-top: 50px;
         }
 
+        .reg_container{
+            background: #fff;
+            padding: 20px;
+            width: 450px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 5px;
+            margin-left: 30%;
+            margin-top: 10%;
+        }
+        
         .reg_content {
-            padding-top: 20px;
-            padding-left: 5%;
+            padding-top: 1%;
+            position: relative;
+            right: 15%;
         }
 
         .reg_content h1 {
@@ -84,18 +82,63 @@ see this image how the error message is displaying like that to write the code <
             width:60px;
             height:60px;
             padding: 10px 0; 
+            margin: 0 20px;
         }
 
-        button {
+        .container h2 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+            position: relative;
+        }
+
+        .form-group input, 
+        .form-group select, 
+        .form-group textarea {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        .error {
+            color: red;
+            font-size: 12px;
+            margin-top: 5px;
+        }
+
+        .invalid {
+            border-color: red;
+        }
+
+        .btn {
             width: 100%;
             padding: 10px;
-            background: #510AC9;
-            color: #fff;
+            background: #007BFF;
+            color: white;
             border: none;
-            border-radius: 5px;
             cursor: pointer;
         }
 
+        .btn:hover {
+            background: #0056b3;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        
         .icon-box {
             display: inline-block;
             width: 100px;
@@ -115,122 +158,142 @@ see this image how the error message is displaying like that to write the code <
             font-size: 20px;
         }
 
-        .footer_container p {
-            color:gray;
-        }
-
-        .error-message {
-            color: red;
-            font-size: 14px;
-            margin-top: 5px;
-        }
     </style>
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            document.querySelectorAll('.form-control').forEach(input => {
-                input.addEventListener('input', () => {
-                    const errorDiv = input.nextElementSibling;
-                    if (errorDiv && errorDiv.classList.contains('error-message')) {
-                        errorDiv.textContent = '';
-                    }
-                });
-            });
-        });
-    </script>
+    
 </head>
 <body>
-    <header>
+<header>
         <a href="#"><h1 style="font-size:25px; color:white;"><img src="/huntm/Image/Huntm-logo.svg" alt="Huntm Logo" class="huntmlogo">Huntm</h1></a>
     </header>
+<div class="container">
+    
 
-    <div class="reg_form">
-        <div class="reg_content">
-            <h1>Keep your customers <br> engaged with your <br> business</h1>
-            <p><i class="fas fa-chevron-right"></i>Send campaigns to your customers</p>
-            <p><i class="fas fa-chevron-right"></i>Track the results</p>
-            <p><i class="fas fa-chevron-right"></i>Manage your customers</p>
-            <p><i class="fas fa-chevron-right"></i>Get insights</p>
-        </div>
-        <div class="reg_container">
-            <h1 class="text-center">CREATE ACCOUNT</h1>
-            <?php if ($this->session->flashdata('success')): ?>
-                <div class="alert alert-success">
-                    <?= $this->session->flashdata('success'); ?>
-                </div>
-            <?php endif; ?>
+    <div class="reg_content">
+        <h1>Keep your customers <br> engaged with your <br> business</h1>
+        <p><i class="fas fa-chevron-right"></i>Send campaigns to your customers</p>
+        <p><i class="fas fa-chevron-right"></i>Track the results</p>
+        <p><i class="fas fa-chevron-right"></i>Manage your customers</p>
+        <p><i class="fas fa-chevron-right"></i>Get insights</p>
+    </div>
 
-            <?php if ($this->session->flashdata('error')): ?>
-                <div class="alert alert-danger">
-                    <?= $this->session->flashdata('error'); ?>
-                </div>
-            <?php endif; ?>
+    <div class="reg_container">
+        <h2>CREATE ACCOUNT</h2>
+        <form method="post" action="<?= base_url('user/submit') ?>">
+            <?php 
+                $errors = $this->session->flashdata('errors') ?? [];
+                $old_data = $this->session->flashdata('old_data') ?? [];
+            ?>
 
-            <form method="post" action="<?=base_url('user/submit')?>">
+            <div class="form-group">
+                <input type="email" name="email" placeholder="Email" class="<?= isset($errors['email']) ? 'invalid' : '' ?>" value="<?= $old_data['email'] ?? '' ?>">
+                <?php if (isset($errors['email'])): ?>
+                    <div class="error"><?= $errors['email'] ?></div>
+                <?php endif; ?>
+            </div>
 
-                <input type="email" name="email" class="form-control" placeholder="Email">
-                <div class="error-message"><?php echo form_error('email'); ?></div>
-
+            <div class="form-group">
                 <div class="row">
-                    <div class="col">
-                        <input type="text" name="firstname" class="form-control" placeholder="First Name">
-                        <div class="error-message"><?php echo form_error('firstname'); ?></div>
+                    <div class="col-md-6">
+                        <input type="text" name="firstname" placeholder="First Name" 
+                            class="form-control <?= isset($errors['firstname']) ? 'invalid' : '' ?>" 
+                            value="<?= $old_data['firstname'] ?? '' ?>">
+                        <?php if (isset($errors['firstname'])): ?>
+                            <div class="error"><?= $errors['firstname'] ?></div>
+                        <?php endif; ?>
                     </div>
-                    <div class="col">
-                        <input type="text" name="lastname" class="form-control" placeholder="Last Name">
-                        <div class="error-message"><?php echo form_error('lastname'); ?></div>
+                    <div class="col-md-6">
+                        <input type="text" name="lastname" placeholder="Last Name" 
+                            class="form-control <?= isset($errors['lastname']) ? 'invalid' : '' ?>" 
+                            value="<?= $old_data['lastname'] ?? '' ?>">
+                        <?php if (isset($errors['lastname'])): ?>
+                            <div class="error"><?= $errors['lastname'] ?></div>
+                        <?php endif; ?>
                     </div>
                 </div>
+            </div>
 
-                <input type="text" name="phone" class="form-control" placeholder="Mobile Number">
-                <div class="error-message"><?php echo form_error('phone'); ?></div>
+            <div class="form-group">
+                <input type="text" name="phone" placeholder="Mobile Number" class="<?= isset($errors['phone']) ? 'invalid' : '' ?>" value="<?= $old_data['phone'] ?? '' ?>">
+                <?php if (isset($errors['phone'])): ?>
+                    <div class="error"><?= $errors['phone'] ?></div>
+                <?php endif; ?>
+            </div>
 
-                <input type="text" name="username" class="form-control" placeholder="User Name">
-                <div class="error-message"><?php echo form_error('username'); ?></div>
+            <div class="form-group">
+                <input type="text" name="username" placeholder="Username" class="<?= isset($errors['username']) ? 'invalid' : '' ?>" value="<?= $old_data['username'] ?? '' ?>">
+                <?php if (isset($errors['username'])): ?>
+                    <div class="error"><?= $errors['username'] ?></div>
+                <?php endif; ?>
+            </div>
 
-                <input type="password" name="password" class="form-control" placeholder="Password">
-                <div class="error-message"><?php echo form_error('password'); ?></div>
+            <div class="form-group">
+                <input type="password" name="password" placeholder="Password" class="<?= isset($errors['password']) ? 'invalid' : '' ?>">
+                <?php if (isset($errors['password'])): ?>
+                    <div class="error"><?= $errors['password'] ?></div>
+                <?php endif; ?>
+            </div>
 
-                <input type="password" name="confirm_password" class="form-control" placeholder="Confirm Password">
-                <div class="error-message"><?php echo form_error('confirm_password'); ?></div>
-
-                <select name="role" class="form-control">
+            <div class="form-group">
+                <select name="role" placeholder="Role" class="<?= isset($errors['role']) ? 'invalid' : '' ?>">
                     <option value="">User Role</option>
                     <option value="distributor">Distributor</option>
                     <option value="manager">Manager</option>
                     <option value="staff">Staff</option>
                     <option value="fieldofficer">Field Officer</option>
                 </select>
-                <div class="error-message"><?php echo form_error('role'); ?></div>
 
-                <textarea name="address" class="form-control" placeholder="Address" rows="3"></textarea>
-                <div class="error-message"><?php echo form_error('address'); ?></div>
+                <?php if (isset($errors['role'])): ?>
+                    <div class="error"><?= $errors['role'] ?></div>
+                <?php endif; ?>
+            </div>
 
+            <div class="form-group">
+                <input type="text" name="address" placeholder="Address" class="<?= isset($errors['address']) ? 'invalid' : '' ?>">
+                <?php if (isset($errors['address'])): ?>
+                    <div class="error"><?= $errors['address'] ?></div>
+                <?php endif; ?>
+            </div>
+
+            <div class="form-group">
                 <div class="row">
-                    <div class="col">
-                        <input type="text" name="pincode" class="form-control" placeholder="Pincode">
-                        <div class="error-message"><?php echo form_error('pincode'); ?></div>
+                    <div class="col-md-6">
+                        <input type="text" name="pincode" placeholder="Pincode" 
+                            class="form-control <?= isset($errors['pincode']) ? 'invalid' : '' ?>" 
+                            value="<?= $old_data['pincode'] ?? '' ?>">
+                        <?php if (isset($errors['pincode'])): ?>
+                            <div class="error"><?= $errors['pincode'] ?></div>
+                        <?php endif; ?>
                     </div>
-                    <div class="col">
-                        <input type="text" name="city" class="form-control" placeholder="City">
-                        <div class="error-message"><?php echo form_error('city'); ?></div>
+                    <div class="col-md-6">
+                        <input type="text" name="city" placeholder="City" 
+                            class="form-control <?= isset($errors['city']) ? 'invalid' : '' ?>" 
+                            value="<?= $old_data['city'] ?? '' ?>">
+                        <?php if (isset($errors['city'])): ?>
+                            <div class="error"><?= $errors['city'] ?></div>
+                        <?php endif; ?>
                     </div>
                 </div>
+            </div>
 
-                <input type="text" name="officenumber" class="form-control" placeholder="Office Mobile Number">
-                <div class="error-message"><?php echo form_error('officenumber'); ?></div>
+            <div class="form-group">
+                <input type="text" name="officemaplink" placeholder="Officemaplink" class="<?= isset($errors['officemaplink']) ? 'invalid' : '' ?>">
+                <?php if (isset($errors['officemaplink'])): ?>
+                    <div class="error"><?= $errors['officemaplink'] ?></div>
+                <?php endif; ?>
+            </div>
 
-                <div class="input-group">
-                    <input type="text" name="officemaplink" class="form-control" placeholder="Map">
-                    <span class="input-group-text">📍</span>
-                </div>
-                <div class="error-message"><?php echo form_error('officemaplink'); ?></div>
+            <div class="form-group">
+                <input type="text" name="officenumber" placeholder="Officenumber" class="<?= isset($errors['officenumber']) ? 'invalid' : '' ?>">
+                <?php if (isset($errors['officenumber'])): ?>
+                    <div class="error"><?= $errors['officenumber'] ?></div>
+                <?php endif; ?>
+            </div>
 
-                <button type="submit">SIGN UP</button>
+            <button type="submit" class="btn">Sign Up</button>
+            <p style="text-align:center; padding-top: 10px;">Already have an account? <a href="login_user">Login</a></p>
 
-                <p style="text-align:center; padding-top: 10px;">Already have an account? <a href="login_user">Login</a></p>
-
-            </form>
-            <div class="icon-box">
+        </form>
+        <!-- <div class="icon-box">
                 <a href="#"><i class="fab fa-facebook-f"></i></a>
             </div>
             <div class="icon-box">
@@ -238,11 +301,27 @@ see this image how the error message is displaying like that to write the code <
             </div>
             <div class="icon-box">
                 <a href="#"><i class="fab fa-github"></i></a>
-            </div>
-        </div> 
+            </div> -->
+
     </div>
-    <footer class="footer_container">
-        <p>© 2022 Huntm, Inc. All rights reserved.</p>
-    </footer>
+</div>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        let inputs = document.querySelectorAll("input, select, textarea");
+
+        inputs.forEach(input => {
+            input.addEventListener("input", function () {
+                if (this.classList.contains("invalid")) {
+                    this.classList.remove("invalid"); 
+                    let errorDiv = this.nextElementSibling;
+                    if (errorDiv && errorDiv.classList.contains("error")) {
+                        errorDiv.remove(); 
+                    }
+                }
+            });
+        });
+    });
+</script>
+<!-- <script src="application/views/javascript/user.js"></script> -->
 </body>
 </html>

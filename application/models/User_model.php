@@ -4,6 +4,7 @@
 			$this->db->insert('user',$data);
 			return true;
 		}
+
 		public function getUser($email){
 			return $this->db->where('email',$email)->get('user')->row();
 		}
@@ -21,11 +22,10 @@
 			return false;
 		}
 
-
 		public function getUserByEmail($email){
 			return $this->db->where('email',$email)->get('user')->row();
 		}
-
+		
 		//Suggestion Data
 		public function insert_suggestion($data) {
 			return $this->db->insert('suggestions', $data);
