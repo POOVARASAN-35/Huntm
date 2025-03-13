@@ -141,8 +141,9 @@ class User extends CI_Controller {
 		}
 	}
 	
+	//here suggestion page section
     public function suggestion_form() {
-        $this->load->view('suggestion_form');
+        $this->load->view('suggestion_form'); 
     }
 
 	public function submit_suggestion() {
@@ -156,16 +157,16 @@ class User extends CI_Controller {
 
 		//check validation of form
 		if (empty($name)) {
-			$errors[] = 'Name field is required.';
+			$errors['name'] = 'Name field is required.';
 		}
 		if (empty($application)) {
-			$errors[] = 'Application field is required.';
+			$errors['application'] = 'Application field is required.';
 		}
 		if (empty($suggestion_type)) {
-			$errors[] = 'Suggestion type field is required.';
+			$errors['suggestion_type'] = 'Suggestion type field is required.';
 		}
 		if (empty($message)) {
-			$errors[] = 'Message field is required.';
+			$errors['message'] = 'Message field is required.';
 		}
 	
 		if (!empty($errors)) {

@@ -125,7 +125,7 @@
         } 
 
         .recording-btn { 
-            background: #007bff; 
+            background: green; 
             color: white; 
             border: none; 
             padding: 10px; 
@@ -135,8 +135,15 @@
             margin-top: 10px;
         } 
 
-        .recording-btn:hover { 
-            background: #0056b3; 
+        .recording-btn1 { 
+            background: red; 
+            color: white; 
+            border: none; 
+            padding: 10px; 
+            border-radius: 4px; 
+            cursor: pointer;
+            transition: 0.3s; 
+            margin-top: 10px;
         } 
 
         .submit-btn { 
@@ -211,9 +218,11 @@
                 <input type="checkbox" id="anonymous" name="anonymous"> Submit Anonymously
             </label> -->
         </div>
+        <?php $errors = $this->session->flashdata('errors'); ?>
+
             <div class="form-group">
                 <input type="text" name="name" placeholder="Enter your name" id="name" class="form-control validate">
-                <span class="error"><?php echo form_error("name"); ?></span>
+                <span class="error"><?php echo isset($errors['name']) ? $errors['name'] : ''; ?></span>
             </div>
 
             <div class="form-group">
@@ -223,30 +232,35 @@
                     <option value="BI Report">BI Report</option>
                     <option value="Other">Other</option>
                 </select>
-                <span class="error"><?php echo form_error('application'); ?></span>
+                <span class="error"><?php echo isset($errors['application']) ? $errors['application'] : ''; ?></span>
             </div>
 
             <div class="form-group">
-                <label for="suggestion_type"></label>
                 <select name="suggestion_type" class="form-control validate" id="suggestion_type">
                     <option value="">Suggestion Type</option>
                     <option value="Change">Change</option>
                     <option value="Suggestion">Suggestion</option>
                 </select>
-                <span class="error"><?php echo form_error('suggestion_type'); ?></span>
+                <span class="error"><?php echo isset($errors['suggestion_type']) ? $errors['suggestion_type'] : ''; ?></span>
             </div>
 
             <div class="form-group">
                 <textarea name="message" class="form-control validate" id="message" placeholder="Enter your message"></textarea>
-                <span class="error"><?php echo form_error('message'); ?></span>
+                <span class="error"><?php echo isset($errors['message']) ? $errors['message'] : ''; ?></span>
             </div>
 
             <div class="form-group">
                 <button type="button" onclick="startRecording()" class="recording-btn">Start Recording</button>
-                <button type="button" onclick="stopRecording()" class="recording-btn">Stop Recording</button>
+                <button type="button" onclick="stopRecording()" class="recording-btn1">Stop Recording</button>
                 <span id="status"></span>
                 <div id="timer"></div>
+                <span class="error"><?php echo isset($errors['voice_message']) ? $errors['voice_message'] : ''; ?></span>
             </div>
+
+            <?php if (isset($errors['general'])): ?>
+                <div class="alert alert-danger"><?php echo $errors['general']; ?></div>
+            <?php endif; ?>
+
 
             <button type="submit" class="submit-btn">Save</button>
         </form>
@@ -325,18 +339,38 @@
         });
 
         function validateForm() {
-            let isValid = true;
-            let fields = document.querySelectorAll('.validate');
-            fields.forEach(field => {
-                if (field.value.trim() === '') {
-                    field.nextElementSibling.textContent = 'This field is required.';
-                    isValid = false;
-                } else {
-                    field.nextElementSibling.textContent = '';
-                }
-            });
-            return isValid;
+        let isValid = true;
+        let fields = document.querySelectorAll('.validate');
+
+        fields.forEach(field => {
+            let errorSpan = field.nextElementSibling;
+            if (field.value.trim() === '') {
+                let fieldName = field.getAttribute("name");
+                let errorMessage = getErrorMessage(fieldName);
+                errorSpan.textContent = errorMessage;
+                isValid = false;
+            } else {
+                errorSpan.textContent = '';
+            }
+        });
+
+        return isValid;
+    }
+
+    function getErrorMessage(fieldName) {
+        switch (fieldName) {
+            case "name":
+                return "Please enter your Name.";
+            case "application":
+                return "Please select an Application.";
+            case "suggestion_type":
+                return "Please choose a Suggestion Type.";
+            case "message":
+                return "Please enter your Message.";
+            default:
+                return "This field is required.";
         }
+    }
 
         document.querySelectorAll(".validate").forEach(input => {
             input.addEventListener("input", () => {
