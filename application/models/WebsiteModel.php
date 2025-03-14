@@ -28,8 +28,8 @@ class WebsiteModel extends CI_Model {
     // }
 
     public function get_all_websites() {
-        $this->db->select('website_Id, website_userId, website_password, website_url'); 
-        $this->db->from('website_table'); 
+        $this->db->select('website_Id, website_userId, website_password, website_url');
+        $this->db->from('website_table');
         $query = $this->db->get();
         return $query->result_array();
     }
