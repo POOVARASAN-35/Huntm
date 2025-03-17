@@ -93,7 +93,7 @@
         <p style="color: red;"><?php echo $this->session->flashdata('error'); ?></p>
     <?php endif; ?>
 
-    <table>
+    <table class="table">
         <tr>
             <th>Website URL</th>
             <th>Username</th>
@@ -109,7 +109,7 @@
                 <td><?php echo htmlspecialchars($website['website_userId']); ?></td>
                 <td class="password-hidden">******</td>
                 <td>
-                    <form action="<?php echo site_url('WebsiteController/auto_login'); ?>" method="POST">
+                    <form action="<?php echo site_url('User/auto_login'); ?>" method="POST">
                         <input type="hidden" name="url" value="<?php echo htmlspecialchars($website['website_url']); ?>">
                         <input type="hidden" name="userId" value="<?php echo htmlspecialchars($website['website_userId']); ?>">
                         <input type="hidden" name="password" value="<?php echo htmlspecialchars($website['website_password']); ?>">

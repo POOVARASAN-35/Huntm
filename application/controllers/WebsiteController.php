@@ -1,4 +1,4 @@
-<?php
+<!-- <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 class WebsiteController extends CI_Controller {
@@ -101,5 +101,15 @@ class WebsiteController extends CI_Controller {
         }
     }
 
+    public function websitedashboard() {
+        $this->load->view('website_dashboard');
+    }
+
+    public function store_website() {
+        $this->load->model('WebsiteModel'); 
+        $data['websites'] = $this->WebsiteModel->get_all_websites();
+    
+        $this->load->view('store_website', $data); // Only load the table, not the full page
+    }
 }
-?>
+?> -->

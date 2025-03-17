@@ -6,9 +6,8 @@
     <title>Login Form</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <link rel="stylesheet" href="<?= base_url('/Huntm/assets/css/registrationform.css'); ?>">
     <style>
-         body {
+        body {
             font-family: 'Poppins', sans-serif; 
             font-size: 16px; 
             font-weight: 400; 
@@ -27,13 +26,13 @@
             z-index: 1000;
         }
         
-        .huntmlogo{
-            width:60px;
-            height:60px;
+        .huntmlogo {
+            width: 60px;
+            height: 60px;
             padding: 10px 0;  
         }
         
-        a{
+        a {
             text-decoration: none;
         }
         
@@ -41,11 +40,10 @@
             display: grid;
             grid-template-columns: repeat(2,1fr);
             gap:20px;
-            margin-top: 70px;
+            margin-top: 100px;
         }
 
         .reg_content {
-            padding-top: 20px;
             padding-left: 5%;
         }
 
@@ -56,9 +54,6 @@
         }
 
         .reg_content p {
-            text-align: left;
-            display: flex;
-            align-items: center;
             font-size: 20px;
             color: white;
             padding:5px 0;
@@ -81,15 +76,11 @@
         .reg_container h2 {
             font-weight: bold;
             color: #3a3a3a;
-            text-align:center;
-        }
-
-        .reg_container p{
-            text-align:center;
+            text-align: center;
         }
 
         input {
-            width: 95%;
+            width: 100%;
             padding: 10px;
             margin: 10px 0;
             border: 1px solid #ccc;
@@ -112,14 +103,14 @@
         .forgot-password {
             display: block;
             margin-top: 10px;
-            color: #777;
-            text-decoration: none;
+            text-align: center;
             font-size: 14px;
         }
 
         .register-link {
             margin-top: 10px;
             font-size: 14px;
+            text-align: center;
         }
 
         .register-link a {
@@ -128,45 +119,25 @@
             font-weight: bold;
         }
 
-        .icon-box {
-            display: inline-block;
-            width: 100px;
-            height: 30px;
-            margin: 5px;
-            text-align: center;
-            vertical-align: middle;
-            line-height: 35px;
-            border: 1px solid;
-            border-radius: 5px;
-            position:relative;
-            left:30px; 
-        }
-
-        .icon-box i {
-            color: black;
-            font-size: 20px;
-        }
-
         .error {
             color: red;
             font-size: 14px;
         }
-
     </style>
 </head>
 <body>
     <header>
         <a href="#"><h1 style="font-size:25px; color:white;">
-            <img src="/Huntm/Image/Huntm-logo.svg" alt="Huntm Logo" class="huntmlogo">Huntm
+            <img src="/Huntm/Image/Huntm-logo.svg" alt="Huntm Logo" class="huntmlogo"> Huntm
         </h1></a>
     </header>
 
     <div class="login-page">
         <div class="reg_content">
-            <h1>Keep your customers engaged with your business</h1>
-            <p><i class="fas fa-chevron-right"></i>Send campaigns to your customers</p>
+            <h1>Keep your customers engaged</h1>
+            <p><i class="fas fa-chevron-right"></i>Send campaigns to customers</p>
             <p><i class="fas fa-chevron-right"></i>Track the results</p>
-            <p><i class="fas fa-chevron-right"></i>Manage your customers</p>
+            <p><i class="fas fa-chevron-right"></i>Manage customers</p>
             <p><i class="fas fa-chevron-right"></i>Get insights</p>
         </div>
 
@@ -189,10 +160,39 @@
 
                 <button type="submit" class="btn btn-primary w-100">Login</button>
 
-                <a href="<?= base_url('user/send_password') ?>" class="d-block text-center mt-2">Forgot Password?</a>
-                <p class="text-center mt-2">New to Huntm.in? <a href="<?= base_url('user/signup') ?>">Register</a></p>
+                <a href="<?= base_url('user/send_password') ?>" class="forgot-password">Forgot Password?</a>
+                <p class="register-link">New to Huntm.in? <a href="<?= base_url('user/signup') ?>">Register</a></p>
             </form>
         </div>
     </div>
+
+    <!-- Success Modal -->
+    <div class="modal fade" id="successModal" tabindex="-1" aria-labelledby="successModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header bg-success text-white">
+                    <h5 class="modal-title" id="successModalLabel">Login Successful</h5>
+                </div>
+                <div class="modal-body">
+                    You have logged in successfully!
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript for showing success modal -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <?php if ($this->session->flashdata('login_success')): ?>
+    <script>
+        window.onload = function() {
+            var successModal = new bootstrap.Modal(document.getElementById('successModal'));
+            successModal.show();
+
+            setTimeout(() => {
+                window.location.href = "<?= base_url('user/suggestion_form') ?>";
+            }, 2000);
+        };
+    </script>
+    <?php endif; ?>
 </body>
 </html>

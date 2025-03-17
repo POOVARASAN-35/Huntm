@@ -73,7 +73,7 @@
     <div class="form-container">
         <h3 class="text-center mb-4"><i class="fas fa-globe"></i> Add Website</h3>
 
-        <form action="<?= base_url('WebsiteController/store'); ?>" method="POST">
+        <form action="<?= base_url('User/store'); ?>" method="POST">
             <div class="mb-3">
                 <div class="input-group">
                     <span class="input-group-text"><i class="fas fa-link"></i></span>

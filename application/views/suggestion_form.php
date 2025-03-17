@@ -13,7 +13,7 @@
             font-weight: 400; 
             color: #333; 
             line-height: 1.6; 
-            background-color: #2C3E50; 
+            background-color:rgb(3, 89, 116); 
         } 
 
         header { 
@@ -51,6 +51,7 @@
             text-align: center; 
             position: relative;
             right: -18%; 
+            border: 1px solid;
         } 
 
         .suggest-content{ 
@@ -179,24 +180,25 @@
             color: red;
             font-size: 14px;
         }
+        .back-btn {
+        background: none;
+        border: none;
+        color: black;
+        font-size: 16px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        margin-top: 10px;
+    }
 
+    .back-btn i {
+        margin-right: 5px;
+        font-size: 15px;
+    }
     </style>
 </head>
 <body>
-<?php if ($this->session->flashdata('success')): ?>
-    <script>
-        window.onload = function() {
-            alert("<?php echo $this->session->flashdata('success'); ?>");
-        };
-    </script>
-<?php endif; ?>
-<?php if ($this->session->flashdata('errors')): ?>
-    <div class="alert alert-danger" role="alert">
-        <?php foreach ($this->session->flashdata('errors') as $error): ?>
-            <p><?php echo $error; ?></p>
-        <?php endforeach; ?>
-    </div>
-<?php endif; ?>
+
 <header>
     <a href="#"><h1 style="font-size:25px; color:white;"><img src="/Huntm/Image/Huntm-logo.svg" alt="Huntm Logo" class="huntmlogo">Huntm</h1></a>
 </header>
@@ -214,16 +216,28 @@
         </div>
         <form id="suggestionForm" method="post" action="<?= base_url('user/submit_suggestion'); ?>">
         <div class="form-group">
-            <!-- <label>
+            <label>
                 <input type="checkbox" id="anonymous" name="anonymous"> Submit Anonymously
-            </label> -->
+            </label>
         </div>
-        <?php $errors = $this->session->flashdata('errors'); ?>
+        <?php if ($this->session->flashdata('success')): ?>
+            <script>
+                window.onload = function() {
+                    showAlert("<?php echo $this->session->flashdata('success'); ?>", "success");
+                };
+            </script>
+        <?php elseif ($this->session->flashdata('error')): ?>
+            <script>
+                window.onload = function() {
+                    showAlert("<?php echo $this->session->flashdata('error'); ?>", "error");
+                };
+            </script>
+        <?php endif; ?>
 
-            <div class="form-group">
+            <!-- <div class="form-group">
                 <input type="text" name="name" placeholder="Enter your name" id="name" class="form-control validate">
                 <span class="error"><?php echo isset($errors['name']) ? $errors['name'] : ''; ?></span>
-            </div>
+            </div> -->
 
             <div class="form-group">
                 <select name="application" class="form-control validate" id="application">
@@ -254,6 +268,7 @@
                 <button type="button" onclick="stopRecording()" class="recording-btn1">Stop Recording</button>
                 <span id="status"></span>
                 <div id="timer"></div>
+                <audio id="audioPlayback" controls style="display:none;"></audio>
                 <span class="error"><?php echo isset($errors['voice_message']) ? $errors['voice_message'] : ''; ?></span>
             </div>
 
@@ -263,6 +278,9 @@
 
 
             <button type="submit" class="submit-btn">Save</button>
+            <button type="button" class="back-btn" onclick="goBack()">
+                <i class="fas fa-arrow-left"></i> Back
+            </button>
         </form>
     </div>
 </div>
@@ -303,11 +321,16 @@
                 reader.onloadend = () => {
                     audioBase64 = reader.result.split(",")[1]; 
                     document.getElementById('status').innerText = "Recording Stopped.";
+                    const audioURL = URL.createObjectURL(audioBlob);
+                    const audioPlayer = document.getElementById("audioPlayback");
+                    audioPlayer.src = audioURL;
+                    audioPlayer.style.display = "block";
+                };
                 };
             };
             stopTimer();
         }
-    }
+    
 
     function startTimer() {
         document.getElementById('timer').style.display = "block";
@@ -389,6 +412,32 @@
             nameField.disabled = false;
         }
     });
+    function goBack() {
+        window.location.href = "<?= base_url('user/login_user'); ?>"; // Adjust this to your login route
+    }
 </script>
+<!-- Include SweetAlert2 -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        <?php if ($this->session->flashdata('success')): ?>
+            Swal.fire({
+                title: "Success!",
+                text: "<?php echo $this->session->flashdata('success'); ?>",
+                icon: "success",
+                confirmButtonText: "OK"
+            });
+        <?php elseif ($this->session->flashdata('error')): ?>
+            Swal.fire({
+                title: "Error!",
+                text: "<?php echo $this->session->flashdata('error'); ?>",
+                icon: "error",
+                confirmButtonText: "OK"
+            });
+        <?php endif; ?>
+    });
+</script>
+
 </body>
 </html>
